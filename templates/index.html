@@ -1,0 +1,59 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sport News MVP</title>
+</head>
+<body style="font-family: sans-serif; max-width: 600px; margin: auto;">
+    <h1>🔥 Top Sports News (Summarized)</h1>
+    {% for title, url, summary in news %}
+        <h3><a href="{{ url }}" target="_blank">{{ title }}</a></h3>
+        <p>{{ summary }}</p>
+        <hr>
+    {% endfor %}
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Top Sports News</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .article {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .article a {
+            font-weight: bold;
+            color: #0056b3;
+            text-decoration: none;
+        }
+        .article p {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Top Sports News (Summarized)</h1>
+    
+    {% for article in articles %}
+        <div class="article">
+            <a href="{{ article.url }}" target="_blank">{{ article.title }}</a>
+            <p>{{ article.summary }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>
