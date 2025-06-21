@@ -2,13 +2,15 @@ from flask import Flask, render_template
 from transformers import pipeline
 import requests
 from bs4 import BeautifulSoup
+import os
 
+# Initialize Flask app
 app = Flask(__name__)
 
 # Load Hugging Face summarization pipeline
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
-# BBC Sport URL to scrape
+# BBC Sport URL
 BBC_URL = "https://www.bbc.com/sport"
 
 def get_article_links():
@@ -21,18 +23,18 @@ def get_article_links():
         title = tag.get_text(strip=True)
         href = tag['href']
         
-        # Basic filtering for real articles (ignore empty, images, etc.)
+        # Filter valid articles
         if title and "/sport/" in href and "live" not in href.lower():
             full_url = "https://www.bbc.com" + href if href.startswith("/") else href
             articles.append({"title": title, "url": full_url})
         
         if len(articles) >= 5:
-            break  # Limit to 5 articles
+            break
 
     return articles
 
 def fetch_article_text(url):
-    """Extract visible article text from the URL."""
+    """Extract visible text from article."""
     try:
         res = requests.get(url)
         soup = BeautifulSoup(res.content, "html.parser")
@@ -43,12 +45,11 @@ def fetch_article_text(url):
         return ""
 
 def summarize_article(text):
-    """Summarize article text using Hugging Face model."""
+    """Summarize the article content."""
     if not text:
         return "Could not fetch content."
     
-    # Truncate to max token-friendly length
-    text = text[:1000]
+    text = text[:1000]  # Truncate to max token-friendly length
 
     try:
         result = summarizer(text, max_length=120, min_length=30, do_sample=False)
@@ -58,7 +59,7 @@ def summarize_article(text):
 
 @app.route("/")
 def index():
-    """Main route to display summarized articles."""
+    """Homepage route that shows summaries."""
     articles = get_article_links()
     
     for article in articles:
@@ -68,5 +69,7 @@ def index():
     
     return render_template("index.html", articles=articles)
 
+# Run app using environment port if available
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
