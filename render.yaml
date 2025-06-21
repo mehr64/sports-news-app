@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: sports-news-app
+    env: python
+    buildCommand: ""
+    startCommand: "python app.py"
+    envVars:
+      - key: TRANSFORMERS_CACHE
+        value: /tmp/huggingface
