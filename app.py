@@ -8,7 +8,9 @@ import os
 app = Flask(__name__)
 
 # Load Hugging Face summarization pipeline
-summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+# summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
+
 
 # BBC Sport URL
 BBC_URL = "https://www.bbc.com/sport"
@@ -28,7 +30,8 @@ def get_article_links():
             full_url = "https://www.bbc.com" + href if href.startswith("/") else href
             articles.append({"title": title, "url": full_url})
         
-        if len(articles) >= 5:
+        # if len(articles) >= 5:
+        if len(articles) >= 2:    
             break
 
     return articles
@@ -52,7 +55,8 @@ def summarize_article(text):
     text = text[:1000]  # Truncate to max token-friendly length
 
     try:
-        result = summarizer(text, max_length=120, min_length=30, do_sample=False)
+        # result = summarizer(text, max_length=120, min_length=30, do_sample=False)
+        result = summarizer(text, max_length=55, min_length=30, do_sample=False)
         return result[0]['summary_text']
     except Exception:
         return "Failed to summarize."

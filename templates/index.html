@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Sports News Summary</title>
+  <meta charset="UTF-8">
+  <title>Sports News Summarizer</title>
 </head>
 <body>
-    <h1>Latest Sports News (Summarized)</h1>
+  <h1>Top BBC Sports Articles (Summarized)</h1>
+  <ul>
     {% for article in articles %}
-        <div style="margin-bottom: 20px;">
-            <h2><a href="{{ article.url }}" target="_blank">{{ article.title }}</a></h2>
-            <p>{{ article.summary }}</p>
-        </div>
+      <li>
+        <h2><a href="{{ article.url }}" target="_blank">{{ article.title }}</a></h2>
+        <p>{{ article.summary }}</p>
+      </li>
     {% endfor %}
+  </ul>
 </body>
 </html>
